@@ -20,14 +20,7 @@ architecture rtl of state_machine is
   signal power: std_logic;
   signal soap: integer range 0 to 20;
 
-begin
-
-    -- default / startup values
-    PS <= OFF;
-    sprayed <= '0';
-    purified <= '0';
-
-    function purifier_state(mode: std_logic_vector(1 downto 0)) return states is
+   function purifier_state(mode: std_logic_vector(1 downto 0)) return states is
         variable purifier: state_type;
     begin
         case mode is
@@ -37,6 +30,13 @@ begin
         end case;
         return purifier;
     end function;
+
+begin
+
+    -- default / startup values
+    PS <= OFF;
+    sprayed <= '0';
+    purified <= "00";
     
 
     syncproc : process (clk, NS)
@@ -75,9 +75,9 @@ begin
 
         -- REFILL state
         when REFILL =>
-            if (timer != '0') then
+            if (timer /= '0') then
                 soap <= soap + 1;
-            elsif (timer != '1') then
+            elsif (timer /= '1') then
                 NS <= SPRAY;
             end if;
 

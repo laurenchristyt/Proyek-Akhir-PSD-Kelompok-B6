@@ -13,10 +13,9 @@ end top_level;
 architecture Behavioral of top_level is
 
     component timer_comp is
-        port (
-            generic(freq : integer := 10);
-            Port ( clk : in  std_logic;
-                   output : out  std_logic)
+        generic(freq : integer := 10);
+        Port ( clk : in  std_logic;
+              output : out  std_logic
         );
     end component;
 

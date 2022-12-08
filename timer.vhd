@@ -10,9 +10,10 @@ end timer;
 architecture Behavioral of timer is
 
     signal tick:    integer range 0 to freq - 1 := 0;
-    signal second: integer := 0;   
+    signal second: integer range 0 to 20;
+         
 begin
-    process(clk, tick, second)
+    process(clk)
     begin
         if rising_edge(clk) then
             if tick = freq - 1 then
