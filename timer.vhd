@@ -1,33 +1,38 @@
-library IEEE;
-use IEEE.STD_LOGIC_1164.ALL;
+LIBRARY IEEE;
+USE IEEE.STD_LOGIC_1164.ALL;
 
-entity timer is
-    generic(freq : integer := 10);
-    Port ( clk : in  STD_LOGIC;
-           output : out  STD_LOGIC);
-end timer;
+ENTITY timer IS
+    GENERIC (freq : INTEGER := 5);
+    PORT (
+        clk : IN STD_LOGIC;
+        output : OUT STD_LOGIC;
+        seconds : out integer range 0 to 19
+        );
+END timer;
 
-architecture Behavioral of timer is
+ARCHITECTURE Behavioral OF timer IS
 
-    signal tick:    integer range 0 to freq - 1 := 0;
-    signal second: integer range 0 to 20;
-         
-begin
-    process(clk)
-    begin
-        if rising_edge(clk) then
-            if tick = freq - 1 then
+    SIGNAL tick : INTEGER RANGE 0 TO freq - 1 := 0;
+    SIGNAL second : INTEGER RANGE 0 TO 19;
+
+BEGIN
+    PROCESS (clk)
+    BEGIN
+        IF rising_edge(clk) THEN
+            IF tick = freq - 1 THEN
                 tick <= 0;
-                if second = 19 then 
+                IF second = 19 THEN
                     second <= 0;
-                else
+                ELSE
                     second <= second + 1;
-                end if;
-            else
+                END IF;
+            ELSE
                 tick <= tick + 1;
-            end if;
-        end if;
-    end process;
+            END IF;
+        END IF;
+    END PROCESS;
 
-    output <= '1' when second = 19 else '0';
-end Behavioral;
+    output <= '1' WHEN second = 19 ELSE
+        '0';
+        seconds <= second;
+END Behavioral;

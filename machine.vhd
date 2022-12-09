@@ -8,7 +8,6 @@ ENTITY machine IS
         timer : IN STD_LOGIC;
         peoplecounter : IN INTEGER;
         mode : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
-
         sprayed : OUT STD_LOGIC;
         purified : OUT STD_LOGIC
     );
@@ -18,7 +17,7 @@ ARCHITECTURE rtl OF machine IS
     TYPE states IS (OFF, SPRAY, REFILL, NORMAL, POWERSAVE, BOOST);
     SIGNAL PS, NS : states;
     SIGNAL power : STD_LOGIC;
-    SIGNAL soap : INTEGER RANGE 0 TO 20;
+    SIGNAL soap : INTEGER RANGE 0 TO 100;
 
     FUNCTION purifier_state(mode : STD_LOGIC_VECTOR(1 DOWNTO 0)) RETURN states IS
         VARIABLE purifier : states;
@@ -43,6 +42,7 @@ BEGIN
             PS <= NS;
         END IF;
     END PROCESS;
+
     -- state transition logic
     combproc : PROCESS (clk, PS)
     BEGIN
