@@ -1,99 +1,80 @@
-library ieee;
-use ieee.std_logic_1164.all;
+LIBRARY ieee;
+USE ieee.std_logic_1164.ALL;
 
-entity tb_toplevel is
-end entity;
+ENTITY tb_toplevel IS
+END tb_toplevel;
 
-architecture Behavioral of top_level_tb is
+ARCHITECTURE test OF tb_toplevel IS
+    -- Declare all inputs and outputs
+    SIGNAL clk : STD_LOGIC;
+    SIGNAL peoplecounter : INTEGER;
+    SIGNAL mode : STD_LOGIC_VECTOR(1 DOWNTO 0);
+    SIGNAL sprayed : std_logic;
+    SIGNAL purified : std_logic;
 
-    component tb_toplevel is
-        port (
-            clk : in  STD_LOGIC;
-           peoplecounter: in integer;
-           mode: in std_logic_vector(1 downto 0);
-
-           sprayed: out std_logic;
-           purified: out std_logic_vector(1 downto 0));
+    -- Declare the instance of the top level entity
+    COMPONENT top_level
+        GENERIC (freq : INTEGER := 15);
+        PORT (
+            clk : IN STD_LOGIC;
+            peoplecounter : IN INTEGER;
+            mode : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
+            sprayed : OUT std_logic;
+            purified : OUT std_logic
         );
-    end component;
+    END COMPONENT;
 
-    signal clk: std_logic := '0';
-    signal peoplecounter: integer;
-    signal mode: std_logic_vector(1 downto 0);
-    signal sprayed: std_logic;
-    signal purified: std_logic_vector(1 downto 0);
+BEGIN
 
-begin
+    -- Instantiate the top level entity
+    UUT : top_level
+        generic map (
+            15
+        );
+        PORT MAP (
+            clk => clk,
+            peoplecounter => peoplecounter,
+            mode => mode,
+            sprayed => sprayed,
+            purified => purified
+        );
 
-
-    -- instantiate the top-level design and connect the input and output signals
-    UUT: tb_toplevel
-        port map (clk, peoplecounter, mode, sprayed, purified);
-
-
-    -- generate a clock signal with a 50% duty cycle
-    clock_process : process
-    begin
-        clk <= '1';
-        wait for 10 ns;
+    -- Clock process
+    clock_process : PROCESS
+    BEGIN
         clk <= '0';
-        wait for 10 ns;
-    end process;
+        WAIT FOR 5 ns;
+        clk <= '1';
+        WAIT FOR 5 ns;
+    END PROCESS;
 
-    -- test case 1: peoplecounter = 0, mode = "00"
-    test_case_1: process
-    begin
+    -- Test bench stimulus
+    STIMULUS : PROCESS
+    BEGIN
+        -- Initialize the inputs
         peoplecounter <= 0;
         mode <= "00";
 
-        wait for 30 ns;
-        assert sprayed = '0' and purified = "00"
-            report "Test case 1 failed"
-            severity failure;
+        -- Wait for 10 clock cycles
+        WAIT FOR 10 * 10 ns;
 
-        wait;
-    end process;
-
-    -- test case 2: peoplecounter = 3, mode = "01"
-    test_case_2: process
-    begin
+        -- Change the inputs
         peoplecounter <= 3;
         mode <= "01";
 
-        wait for 30 ns;
-        assert sprayed = '0' and purified = "00"
-            report "Test case 2 failed"
-            severity failure;
+        -- Wait for 10 more clock cycles
+        WAIT FOR 10 * 10 ns;
+        mode <= "10"
 
-        wait;
-    end process;
-
-    -- test case 3: peoplecounter = 5, mode = "10"
-    test_case_3: process
-    begin
+        -- Change the inputs again
         peoplecounter <= 5;
         mode <= "10";
 
-        wait for 30 ns;
-        assert sprayed = '1' and purified = "00"
-            report "Test case 3 failed"
-            severity failure;
+        -- Wait for 10 more clock cycles
+        WAIT FOR 10 * 10 ns;
 
-        wait;
-    end process;
+        -- Stop the simulation
+        WAIT;
+    END PROCESS;
 
-    -- test case 4: peoplecounter = 10, mode = "00"
-    test_case_4: process
-    begin
-        peoplecounter <= 10;
-        mode <= "00";
-
-        wait for 30 ns;
-        assert sprayed = '1' and purified = "00"
-            report "Test case 4 failed"
-            severity failure;
-
-        wait;
-    end process;
-
-end architecture;
+END test;

@@ -56,6 +56,7 @@ begin
         purified
     );
 
+    -- Process agar terlihat di top level status powernya
     PROCESS (clk)
     BEGIN
         IF rising_edge(clk) THEN

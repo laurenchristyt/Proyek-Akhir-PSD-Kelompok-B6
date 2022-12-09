@@ -17,7 +17,7 @@ ARCHITECTURE rtl OF machine IS
     TYPE states IS (OFF, SPRAY, REFILL, NORMAL, POWERSAVE, BOOST);
     SIGNAL PS, NS : states;
     SIGNAL power : STD_LOGIC;
-    SIGNAL soap : INTEGER RANGE 0 TO 100;
+    SIGNAL soap : INTEGER := 4;
 
     FUNCTION purifier_state(mode : STD_LOGIC_VECTOR(1 DOWNTO 0)) RETURN states IS
         VARIABLE purifier : states;
