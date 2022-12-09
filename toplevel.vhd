@@ -13,7 +13,7 @@ end top_level;
 architecture Behavioral of top_level is
 
     component timer_comp is
-        generic(freq : integer := 10);
+        generic(freq : integer := 15);
         Port ( clk : in  std_logic;
               output : out  std_logic
         );
@@ -35,7 +35,7 @@ architecture Behavioral of top_level is
 begin
 
     timer_1 : timer_comp 
-    generic map (freq <= 10)
+    generic map (freq <= 15)
     port map (clk, timer_signal);
 
     machine_1 : machine_comp

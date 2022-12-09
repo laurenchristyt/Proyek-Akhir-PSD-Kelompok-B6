@@ -9,25 +9,19 @@ end timer;
 
 architecture Behavioral of timer is
 
-    signal tick:    integer range 0 to freq - 1 := 0;
-    signal second: integer range 0 to 20;
+    signal second: integer range 0 to freq -1 ;
          
 begin
     process(clk)
     begin
         if rising_edge(clk) then
-            if tick = freq - 1 then
-                tick <= 0;
-                if second = 19 then 
-                    second <= 0;
-                else
-                    second <= second + 1;
-                end if;
+            if second = second - 1 then
+                second <= 0;
             else
-                tick <= tick + 1;
+                second <= second + 1;
             end if;
         end if;
     end process;
 
-    output <= '1' when second = 19 else '0';
+    output <= '1' when second = freq - 1 else '0';
 end Behavioral;
