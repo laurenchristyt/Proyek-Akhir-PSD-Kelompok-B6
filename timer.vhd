@@ -1,13 +1,16 @@
-library IEEE;
-use IEEE.STD_LOGIC_1164.ALL;
+LIBRARY IEEE;
+USE IEEE.STD_LOGIC_1164.ALL;
 
-entity timer is
-    generic(freq : integer := 10);
-    Port ( clk : in  STD_LOGIC;
-           output : out  STD_LOGIC);
-end timer;
+ENTITY timer IS
+    PORT (
+        clk : IN STD_LOGIC;
+        freq : IN INTEGER;
+        output : OUT STD_LOGIC;
+        seconds : out integer range 0 to 19
+        );
+END timer;
 
-architecture Behavioral of timer is
+ARCHITECTURE Behavioral OF timer IS
 
     signal second: integer range 0 to freq -1 ;
          

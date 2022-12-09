@@ -2,23 +2,22 @@ LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
 
-ENTITY state_machine IS
+ENTITY machine IS
     PORT (
         clk : IN STD_LOGIC;
         timer : IN STD_LOGIC;
         peoplecounter : IN INTEGER;
         mode : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
-
         sprayed : OUT STD_LOGIC;
         purified : OUT STD_LOGIC
     );
 END ENTITY;
 
-ARCHITECTURE rtl OF state_machine IS
+ARCHITECTURE rtl OF machine IS
     TYPE states IS (OFF, SPRAY, REFILL, NORMAL, POWERSAVE, BOOST);
     SIGNAL PS, NS : states;
     SIGNAL power : STD_LOGIC;
-    SIGNAL soap : INTEGER RANGE 0 TO 20;
+    SIGNAL soap : INTEGER RANGE 0 TO 100;
 
     FUNCTION purifier_state(mode : STD_LOGIC_VECTOR(1 DOWNTO 0)) RETURN states IS
         VARIABLE purifier : states;
@@ -43,6 +42,7 @@ BEGIN
             PS <= NS;
         END IF;
     END PROCESS;
+
     -- state transition logic
     combproc : PROCESS (clk, PS)
     BEGIN
@@ -74,7 +74,7 @@ BEGIN
                         sprayed <= '0';
                     END IF;
 
-                    -- REFILL state
+                    --  REFILL state
                 WHEN REFILL =>
                         sprayed <= '0';
                         purified <= '0';
@@ -85,7 +85,7 @@ BEGIN
                         NS <= REFILL;
                     END IF;
 
-                    -- NORMAL state
+                    --  NORMAL state
                 WHEN NORMAL =>
                     sprayed <= '0';
                     IF power = '1' THEN
