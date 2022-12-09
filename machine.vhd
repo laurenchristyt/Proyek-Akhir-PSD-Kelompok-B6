@@ -21,7 +21,7 @@ architecture rtl of state_machine is
   signal soap: integer range 0 to 20;
 
    function purifier_state(mode: std_logic_vector(1 downto 0)) return states is
-        variable purifier: state_type;
+        variable purifier: states;
     begin
         case mode is
           when "00" => purifier := NORMAL;
@@ -51,7 +51,7 @@ begin
   combproc : process(clk)
   begin
     if rising_edge(clk) then
-        if (peoplecounter > 3) then
+        if (peoplecounter >= 3) then
             power <= '1';
         else 
             power <= '0';
@@ -66,7 +66,7 @@ begin
 
         -- SPRAY state
         when SPRAY =>
-          if power = '1' and soap > 0 then
+          if power = '1' and soap >= 0 then
             sprayed <= '1';
             NS <= purifier_state(mode);
           else
