@@ -2,7 +2,7 @@ LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
 
-ENTITY state_machine IS
+ENTITY machine IS
     PORT (
         clk : IN STD_LOGIC;
         timer : IN STD_LOGIC;
@@ -14,7 +14,7 @@ ENTITY state_machine IS
     );
 END ENTITY;
 
-ARCHITECTURE rtl OF state_machine IS
+ARCHITECTURE rtl OF machine IS
     TYPE states IS (OFF, SPRAY, REFILL, NORMAL, POWERSAVE, BOOST);
     SIGNAL PS, NS : states;
     SIGNAL power : STD_LOGIC;
@@ -74,7 +74,7 @@ BEGIN
                         sprayed <= '0';
                     END IF;
 
-                    -- REFILL state
+                    --  REFILL state
                 WHEN REFILL =>
                         sprayed <= '0';
                         purified <= '0';
@@ -85,7 +85,7 @@ BEGIN
                         NS <= REFILL;
                     END IF;
 
-                    -- NORMAL state
+                    --  NORMAL state
                 WHEN NORMAL =>
                     sprayed <= '0';
                     IF power = '1' THEN
