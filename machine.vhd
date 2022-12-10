@@ -7,10 +7,10 @@ ENTITY machine IS
         clk : IN STD_LOGIC;
         timer : IN STD_LOGIC;
         peoplecounter : IN INTEGER;
-        mode : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
+        mode : IN STD_LOGIC_VECTOR(1 DOWNTO 0) := "00";
         sprayed : OUT STD_LOGIC;
         purified : OUT STD_LOGIC;
-	soap_indicator : OUT INTEGER
+        soap_indicator : OUT INTEGER
     );
 END ENTITY;
 
@@ -23,11 +23,11 @@ ARCHITECTURE rtl OF machine IS
     FUNCTION purifier_state(mode : STD_LOGIC_VECTOR(1 DOWNTO 0)) RETURN states IS
         VARIABLE purifier : states;
     BEGIN
-        CASE mode IS
+        CASE mode IS -- input dari user
             WHEN "00" => purifier := NORMAL;
             WHEN "01" => purifier := POWERSAVE;
             WHEN "10" => purifier := BOOST;
-            WHEN others => purifier := NORMAL;
+            WHEN OTHERS => purifier := NORMAL; -- error handling
         END CASE;
         RETURN purifier;
     END FUNCTION;
@@ -61,31 +61,30 @@ BEGIN
                     sprayed <= '0';
                     purified <= '0';
                     IF power = '1' THEN
-                        NS <= SPRAY;
+                        NS <= SPRAY; -- siap-siap
                     END IF;
 
                     -- SPRAY state
                 WHEN SPRAY =>
-                    purified <= '0';
-                    IF power = '1' AND soap > 0 THEN
-                        soap <= soap - 1;
+                    purified <= '0'; -- supaya tidak berbarengan
+                    IF power = '1' AND soap = 0 THEN
+                        NS <= REFILL; -- sabun habis
+                    ELSIF power = '0' THEN
+                        NS <= OFF; -- matikan mesin
+                    ELSE
+                        soap <= soap - 1; -- sabun terpakai
                         sprayed <= '1';
-                        NS <= purifier_state(mode);
-                    ELSIF power = '1' AND soap = 0 THEN
-                        NS <= REFILL;
-                        sprayed <= '0';
-		    ELSE
-			NS <= OFF;
+                        NS <= purifier_state(mode); -- siap-siap masuk ke mode purified
                     END IF;
 
                     --  REFILL state
                 WHEN REFILL =>
-                        sprayed <= '0';
-                        purified <= '0';
-                        soap <= soap + 1;
+                    sprayed <= '0';
+                    purified <= '0';
+                    soap <= soap + 1; -- baik spray / purify tidak ada yang berkerja
                     IF (soap = 10) THEN
                         NS <= SPRAY;
-                    ELSE 
+                    ELSE
                         NS <= REFILL;
                     END IF;
 
@@ -95,7 +94,7 @@ BEGIN
                     IF power = '1' THEN
                         IF timer = '0' THEN
                             purified <= '1';
-                            NS <= purifier_state(mode);
+                            NS <= purifier_state(mode); -- bila mau pindah mode
                         ELSE
                             NS <= SPRAY;
                         END IF;
@@ -105,7 +104,7 @@ BEGIN
 
                     -- POWERSAVE state
                 WHEN POWERSAVE =>
-                sprayed <= '0';
+                    sprayed <= '0';
                     IF power = '1' THEN
                         IF timer = '0' THEN
                             purified <= '1';
@@ -119,7 +118,7 @@ BEGIN
 
                     -- BOOST state
                 WHEN BOOST =>
-                sprayed <= '0';
+                    sprayed <= '0';
                     IF power = '1' THEN
                         IF timer = '0' THEN
                             purified <= '1';
@@ -129,7 +128,7 @@ BEGIN
                         END IF;
                     ELSE
                         NS <= OFF;
-                    END IF;               
+                    END IF;
 
             END CASE;
         END IF;

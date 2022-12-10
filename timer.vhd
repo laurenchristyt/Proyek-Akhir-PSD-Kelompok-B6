@@ -5,27 +5,28 @@ ENTITY timer IS
     PORT (
         clk : IN STD_LOGIC;
         freq : IN INTEGER;
-        output : OUT STD_LOGIC;
-        seconds : out integer range 0 to 19
-        );
+        keluaran : OUT STD_LOGIC;
+        seconds : OUT INTEGER RANGE 0 TO 19
+    );
 END timer;
 
 ARCHITECTURE Behavioral OF timer IS
 
-    signal second: integer range 0 to freq -1 ;
-         
-begin
-    process(clk)
-    begin
-        if rising_edge(clk) then
-            if second = freq - 1 then
-                second <= 0;
-            else
-                second <= second + 1;
-            end if;
-        end if;
-    end process;
+    SIGNAL second : INTEGER RANGE 0 TO freq - 1;
 
-    output <= '1' when second = freq - 1 else '0';
+BEGIN
+    PROCESS (clk)
+    BEGIN
+        IF rising_edge(clk) THEN
+            IF second = freq - 1 THEN -- min 1 karena perhitungan mulai dari nol
+                second <= 0;
+            ELSE
+                second <= second + 1;
+            END IF;
+        END IF;
+    END PROCESS;
+
+    keluaran <= '1' WHEN second = freq - 1 ELSE
+        '0';
     seconds <= second;
-end Behavioral;
+END Behavioral;

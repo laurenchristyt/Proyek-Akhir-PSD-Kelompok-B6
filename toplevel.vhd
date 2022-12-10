@@ -1,3 +1,8 @@
+-- B6
+-- LAUREN CHRISTY T.		2106707870
+-- MICHAEL GUNAWAN		2106731195
+-- SYAUQI AULIYA M.		2106707201
+
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 
@@ -7,10 +12,13 @@ ENTITY top_level IS
         clk : IN STD_LOGIC;
         peoplecounter : IN INTEGER;
         mode : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
-        sprayed : OUT std_logic;
-        purified : OUT std_logic;
-	power_indicator : OUT std_logic;
-	soap_indicator : OUT integer
+
+        sprayed : OUT STD_LOGIC;
+        purified : OUT STD_LOGIC;
+
+        power_indicator : OUT STD_LOGIC;
+        soap_indicator : OUT INTEGER;
+        timer_indicator : OUT STD_LOGIC
     );
 END top_level;
 
@@ -20,51 +28,52 @@ ARCHITECTURE Behavioral OF top_level IS
     SIGNAL power : STD_LOGIC;
     SIGNAL second : INTEGER RANGE 0 TO freq - 1;
     SIGNAL soap : INTEGER;
- 
 
+    -- bagaikan memanggil fungsi di bahasa C
     COMPONENT timer IS
         PORT (
             clk : IN STD_LOGIC;
             freq : IN INTEGER;
-            output : OUT STD_LOGIC;
-            seconds : out integer
+            keluaran : OUT STD_LOGIC;
+            seconds : OUT INTEGER
         );
     END COMPONENT;
 
-    component machine is
-        port(
-            clk: in std_logic;
-            timer: in std_logic;
-            peoplecounter: in integer;
-            mode: in std_logic_vector(1 downto 0);
-        
-            sprayed: out std_logic;
-            purified: out std_logic;
-	    soap_indicator : out INTEGER
-          );
-    end component;
+    COMPONENT machine IS
+        PORT (
+            clk : IN STD_LOGIC;
+            timer : IN STD_LOGIC;
+            peoplecounter : IN INTEGER;
+            mode : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
 
-    signal timer_signal : std_logic;
-begin
+            sprayed : OUT STD_LOGIC;
+            purified : OUT STD_LOGIC;
+            soap_indicator : OUT INTEGER
+        );
+    END COMPONENT;
+
+    SIGNAL timer_signal : STD_LOGIC;
+BEGIN
 
     soap_indicator <= soap;
     power_indicator <= power;
+    timer_indicator <= timer_signal;
 
     timer_1 : timer
-    port map (clk, freq, timer_signal);
+    PORT MAP(clk, freq, timer_signal, second);
 
     machine_1 : machine
-    port map (
+    PORT MAP(
         clk,
         timer_signal,
         peoplecounter,
         mode,
         sprayed,
         purified,
-	soap
+        soap
     );
 
-    -- Process agar terlihat di top level status powernya
+    -- Process diperlukan agar terlihat di top level status powernya
     PROCESS (clk)
     BEGIN
         IF rising_edge(clk) THEN
