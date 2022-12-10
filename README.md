@@ -6,6 +6,9 @@ Proyek VHDL dalam bentuk air purifier sekaligus sterilizer yang bekerjanya berga
 
 
 LAUREN CHRISTY T.		2106707870
+
 MICHAEL GUNAWAN		  2106731195
+
 SYAUQI AULIYA M.		2106707201
+
 RIAN ABRAR
