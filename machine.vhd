@@ -35,8 +35,7 @@ ARCHITECTURE rtl OF machine IS
 BEGIN
 
     -- default / startup value
-    sprayed <= '0';
-    purified <= '0';
+    
     soap_indicator <= soap;
     syncproc : PROCESS (clk, NS)
     BEGIN

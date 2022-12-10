@@ -6,13 +6,13 @@ ENTITY timer IS
         clk : IN STD_LOGIC;
         freq : IN INTEGER;
         keluaran : OUT STD_LOGIC;
-        seconds : OUT INTEGER RANGE 0 TO 19
+        seconds : OUT INTEGER RANGE 0 TO 30
     );
 END timer;
 
 ARCHITECTURE Behavioral OF timer IS
 
-    SIGNAL second : INTEGER RANGE 0 TO freq - 1;
+     SIGNAL second : INTEGER RANGE 0 to 30;
 
 BEGIN
     PROCESS (clk)

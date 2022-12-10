@@ -6,13 +6,12 @@
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 
-ENTITY top_level IS
+ENTITY toplevel IS
     GENERIC (freq : INTEGER := 15);
     PORT (
         clk : IN STD_LOGIC;
         peoplecounter : IN INTEGER;
         mode : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
-
         sprayed : OUT STD_LOGIC;
         purified : OUT STD_LOGIC;
 
@@ -20,13 +19,13 @@ ENTITY top_level IS
         soap_indicator : OUT INTEGER;
         timer_indicator : OUT STD_LOGIC
     );
-END top_level;
+END entity;
 
-ARCHITECTURE Behavioral OF top_level IS
+ARCHITECTURE Behavioral OF toplevel IS
 
     TYPE states IS (OFF, SPRAY, REFILL, NORMAL, POWERSAVE, BOOST);
     SIGNAL power : STD_LOGIC;
-    SIGNAL second : INTEGER RANGE 0 TO freq - 1;
+    SIGNAL second : INTEGER RANGE 0 TO 30;
     SIGNAL soap : INTEGER;
 
     -- bagaikan memanggil fungsi di bahasa C
@@ -35,7 +34,7 @@ ARCHITECTURE Behavioral OF top_level IS
             clk : IN STD_LOGIC;
             freq : IN INTEGER;
             keluaran : OUT STD_LOGIC;
-            seconds : OUT INTEGER
+            seconds : OUT INTEGER RANGE 0 TO 30
         );
     END COMPONENT;
 
