@@ -18,7 +18,7 @@ begin
     process(clk)
     begin
         if rising_edge(clk) then
-            if second = second - 1 then
+            if second = freq - 1 then
                 second <= 0;
             else
                 second <= second + 1;
@@ -27,4 +27,5 @@ begin
     end process;
 
     output <= '1' when second = freq - 1 else '0';
+    seconds <= second;
 end Behavioral;

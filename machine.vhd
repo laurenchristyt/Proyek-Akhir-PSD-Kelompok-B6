@@ -9,7 +9,8 @@ ENTITY machine IS
         peoplecounter : IN INTEGER;
         mode : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
         sprayed : OUT STD_LOGIC;
-        purified : OUT STD_LOGIC
+        purified : OUT STD_LOGIC;
+	soap_indicator : OUT INTEGER
     );
 END ENTITY;
 
@@ -36,6 +37,7 @@ BEGIN
     -- default / startup value
     sprayed <= '0';
     purified <= '0';
+    soap_indicator <= soap;
     syncproc : PROCESS (clk, NS)
     BEGIN
         IF rising_edge(clk) THEN
@@ -47,7 +49,7 @@ BEGIN
     combproc : PROCESS (clk, PS)
     BEGIN
         IF rising_edge(clk) THEN
-            IF (peoplecounter > 3) THEN
+            IF (peoplecounter >= 3) THEN
                 power <= '1';
             ELSE
                 power <= '0';
@@ -69,9 +71,11 @@ BEGIN
                         soap <= soap - 1;
                         sprayed <= '1';
                         NS <= purifier_state(mode);
-                    ELSE
+                    ELSIF power = '1' AND soap = 0 THEN
                         NS <= REFILL;
                         sprayed <= '0';
+		    ELSE
+			NS <= OFF;
                     END IF;
 
                     --  REFILL state
@@ -79,7 +83,7 @@ BEGIN
                         sprayed <= '0';
                         purified <= '0';
                         soap <= soap + 1;
-                    IF (timer = '1') THEN
+                    IF (soap = 10) THEN
                         NS <= SPRAY;
                     ELSE 
                         NS <= REFILL;
