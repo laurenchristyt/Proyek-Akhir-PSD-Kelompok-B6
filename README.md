@@ -1,5 +1,12 @@
 # Proyek-Akhir-PSD-Kelompok-B6
 
+PRESENTASI YOUTUBE:
+https://youtu.be/fySVKkfqGME
+
+
+
+
+
 Smart Air Sterilizer and Purifier
 
 Proyek VHDL dalam bentuk air purifier sekaligus sterilizer yang bekerjanya bergantung pada jumlah minimal orang yang berada di dalam ruangan, dengan penerapan Finite State Machine.
